@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -34,7 +33,6 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
     DBHelper dbHelper;
     private ListView listView;
     private TextView mTotalHourTextView, mTotalPriceTextView, currentListIndexTextView;
-    private int salary = 650;
     int currentListIndex;
 
     @Override
@@ -56,7 +54,8 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
 
     private void updateList(int index) {
         loadListFromDB(index);
-        currentListIndexTextView.setText(index + "月");
+        String listIndexText = index + "月";
+        currentListIndexTextView.setText(listIndexText);
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
         updateTotal();
     }
@@ -72,10 +71,9 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
         String SQLCommand = String.format("select %s from %s where %s = '%s'", column, DBHelper.TABLE_NAME, DBHelper.COLUMN_MONTH, month);
 
         list.clear();
+        SQLiteDatabase db = this.dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery(SQLCommand, null);
         try {
-            SQLiteDatabase db = this.dbHelper.getReadableDatabase();
-            Cursor cursor = db.rawQuery(SQLCommand, null);
-
             while (cursor.moveToNext()) {
                 ITEM item = new ITEM();
                 item.date = cursor.getString(0);
@@ -87,6 +85,10 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
 
         } catch (Exception e) {
             Log.e("QQ", "[Database Error] Error on loading DB");
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
         return list;
     }
@@ -162,10 +164,13 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
             totalHours += getTimeGap(list.get(i).startTime, list.get(i).endTime);
         }
 
+        int salary = 650;
         int totalPrice = totalHours * salary;
 
-        mTotalHourTextView.setText(totalHours + "小時");
-        mTotalPriceTextView.setText(totalPrice + "元");
+        String totalHourText = totalHours + "小時";
+        String totalPriceText = totalPrice + "元";
+        mTotalHourTextView.setText(totalHourText);
+        mTotalPriceTextView.setText(totalPriceText);
 
     }
 
@@ -178,7 +183,7 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
 
         int minuteGap;
         int hourGap;
-        int totalMinute = 0;
+        int totalMinute;
 
         if (endMinute < startMinute) {
             minuteGap = endMinute + 60 - startMinute;
@@ -212,22 +217,20 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            //resume tasks needing this permission
-        }
-    }
-
-    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case list_left_arrow:
                 currentListIndex = currentListIndex - 1;
+                if (currentListIndex < 1) {
+                    currentListIndex = 12;
+                }
                 updateList(currentListIndex);
                 break;
             case list_right_arrow:
                 currentListIndex = currentListIndex + 1;
+                if (currentListIndex > 12) {
+                    currentListIndex = 1;
+                }
                 updateList(currentListIndex);
                 break;
         }
