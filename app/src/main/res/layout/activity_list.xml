@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.kuanglin.tutortimerecord.ListActivity">
+
+    <TextView
+        android:id="@+id/label_main_total_hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_toRightOf="@+id/result_main_case_num"
+        android:text="總時數：" />
+
+    <TextView
+        android:id="@+id/result_main_total_hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/label_main_total_hour"
+        android:layout_toRightOf="@+id/label_main_total_hour"
+        android:text="25小時" />
+
+    <TextView
+        android:id="@+id/label_main_case_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="案件編號：" />
+
+    <TextView
+        android:id="@+id/result_main_case_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/label_main_total_hour"
+        android:layout_toRightOf="@+id/label_main_case_num"
+        android:text="1332" />
+
+    <TextView
+        android:id="@+id/label_main_total_money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_toRightOf="@id/result_main_total_hour"
+        android:text="總金額：" />
+
+    <TextView
+        android:id="@+id/result_main_total_money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/label_main_total_hour"
+        android:layout_toRightOf="@+id/label_main_total_money"
+        android:text="6500元" />
+
+    <ImageView
+        android:id="@+id/list_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/label_main_case_num"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/black" />
+
+    <LinearLayout
+        android:id="@+id/list_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/list_line"
+        android:layout_marginLeft="58dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/list_item_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="日期"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/list_item_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="開始時間"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/list_item_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="結束時間"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/list_item_sign"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:text="學生簽名"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/main_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/current_list_index"
+        android:layout_below="@+id/list_title"
+        android:paddingLeft="16dp" />
+
+    <TextView
+        android:id="@+id/current_list_index"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:gravity="center"
+        android:text="3"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <ImageButton
+        android:id="@+id/list_left_arrow"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/current_list_index"
+        android:layout_toLeftOf="@+id/current_list_index"
+        android:background="@color/trans"
+        android:src="@drawable/ic_action_left" />
+
+    <ImageButton
+        android:id="@+id/list_right_arrow"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/current_list_index"
+        android:layout_toRightOf="@+id/current_list_index"
+        android:background="@color/trans"
+        android:src="@drawable/ic_action_right" />
+
+</RelativeLayout>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+
+
+    <TextView
+        android:id="@+id/add_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="上課日期："
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/add_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="64dp"
+        android:layout_toRightOf="@+id/add_date_input"
+        android:text="開始時間："
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/add_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/add_start"
+        android:layout_below="@+id/add_start"
+        android:layout_marginTop="8dp"
+        android:text="結束時間："
+        android:textSize="16sp" />
+
+
+    <TextView
+        android:id="@+id/add_date_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/add_date"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/add_date"
+        android:text="2017/10/31"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/add_start_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/add_start"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/add_start"
+        android:background="@drawable/underline"
+        android:text="10:30 am"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/add_end_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/add_end"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/add_end"
+        android:background="@drawable/underline"
+        android:text="10:30 pm"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/add_end"
+        android:layout_marginTop="8dp"
+        android:background="@color/black" />
+
+    <com.android.graphics.CanvasView
+        android:id="@+id/canvas"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:layout_below="@id/line" />
+
+    <TextView
+        android:id="@+id/add_sign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/canvas"
+        android:layout_marginTop="8dp"
+        android:text="學生簽名："
+        android:textSize="16sp" />
+
+    <ImageButton
+        android:id="@+id/add_redo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/canvas"
+        android:layout_alignTop="@+id/canvas"
+        android:layout_marginRight="8dp"
+        android:background="@color/trans"
+        android:src="@android:drawable/ic_menu_revert"
+        android:tint="@color/black" />
+
+
+</RelativeLayout>
