@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CanvasView-master/CanvasView-master.iml" filepath="$PROJECT_DIR$/CanvasView-master/CanvasView-master.iml" />
-      <module fileurl="file://$PROJECT_DIR$/TutorTimeRecord.iml" filepath="$PROJECT_DIR$/TutorTimeRecord.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TutorTimeRecorder.iml" filepath="$PROJECT_DIR$/TutorTimeRecorder.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

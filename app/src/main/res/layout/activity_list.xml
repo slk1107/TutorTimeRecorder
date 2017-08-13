@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -78,7 +79,7 @@
             android:id="@+id/list_item_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="日期"
+            android:text="@string/class_date"
             android:textSize="16sp" />
 
         <TextView
@@ -86,7 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:text="開始時間"
+            android:text="@string/start_time"
             android:textSize="16sp" />
 
         <TextView
@@ -94,7 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:text="結束時間"
+            android:text="@string/end_time"
             android:textSize="16sp" />
 
         <TextView
@@ -102,7 +103,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
-            android:text="學生簽名"
+            android:text="@string/signature"
             android:textSize="16sp" />
 
     </LinearLayout>
@@ -113,13 +114,16 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/current_list_index"
         android:layout_below="@+id/list_title"
-        android:paddingLeft="16dp" />
+        android:dividerHeight="4dp"
+        android:divider="@color/trans"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
 
     <TextView
         android:id="@+id/current_list_index"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/list_adView"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
@@ -146,5 +150,13 @@
         android:layout_toRightOf="@+id/current_list_index"
         android:background="@color/trans"
         android:src="@drawable/ic_action_right" />
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/list_adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id"></com.google.android.gms.ads.AdView>
 
 </RelativeLayout>

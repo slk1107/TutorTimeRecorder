@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "517146831007",
+    "firebase_url": "https://tutortimerecorder.firebaseio.com",
+    "project_id": "tutortimerecorder",
+    "storage_bucket": "tutortimerecorder.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:517146831007:android:0245a3f755f873fb",
+        "android_client_info": {
+          "package_name": "com.example.kuanglin.tutortimerecord"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "517146831007-5obg2lrnn6d1bicdfsrfbu7r0a3mgtc0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kuanglin.tutortimerecord",
+            "certificate_hash": "4e976df9b9f9a60429b373107796c003fcf9f226"
+          }
+        },
+        {
+          "client_id": "517146831007-3vlbusc4bbnleh0jk9m5fjd91p16r54h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaDU1R7Ew9JdxP-Ko6jGaCaYj4mezMfNg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "517146831007-3vlbusc4bbnleh0jk9m5fjd91p16r54h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

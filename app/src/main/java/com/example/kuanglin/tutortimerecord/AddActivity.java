@@ -27,6 +27,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import static com.example.kuanglin.tutortimerecord.R.id.add_date_input;
 import static com.example.kuanglin.tutortimerecord.R.id.add_end_input;
@@ -45,8 +46,10 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     TextView mDateTextView, mStartTimeTextView, mEndTimeTextView;
     DBHelper dbHelper;
     private CanvasView canvas;
-    public final static int BITMAP_WIDTH = 800;
-    public final static int BITMAP_HEIGHT = 360;
+//    public final static int BITMAP_WIDTH = 800;
+//    public final static int BITMAP_HEIGHT = 360;
+    public final static int BITMAP_WIDTH = 300;
+    public final static int BITMAP_HEIGHT = 135;
 
 
     /**
@@ -194,7 +197,6 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         int hour = Integer.valueOf(times[0]);
         int minute = Integer.valueOf(times[1]);
 
-//        TimePickerDialog timePickerDialog = new TimePickerDialog(AddActivity.this, new TimePickerDialog.OnTimeSetListener() {
         TimePickerDialog timePickerDialog = new TimePickerDialog(AddActivity.this, TimePickerDialog.THEME_DEVICE_DEFAULT_LIGHT, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
@@ -212,10 +214,11 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
     private ITEM getFrom() {
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
-        String currentDateandTime = sdf.format(c.getTime());
+        Locale.getDefault();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss",Locale.getDefault());
+        String currentDateAndTime = sdf.format(c.getTime());
         String name = date.replace("/", "") + "T" + startTime.split("：")[0] + startTime.split("：")[1];
-        String signaturePath = saveToInternalStorage(canvas.getScaleBitmap(BITMAP_WIDTH,BITMAP_HEIGHT), currentDateandTime);
+        String signaturePath = saveToInternalStorage(canvas.getScaleBitmap(BITMAP_WIDTH,BITMAP_HEIGHT), currentDateAndTime);
         Log.d("QQ",signaturePath);
 
         ITEM item = new ITEM();

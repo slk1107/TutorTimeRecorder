@@ -21,6 +21,11 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.NativeExpressAdView;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -33,7 +38,17 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
     DBHelper dbHelper;
     private ListView listView;
     private TextView mTotalHourTextView, mTotalPriceTextView, currentListIndexTextView;
+    private AdView mAdView;
     int currentListIndex;
+    private static final String ADMOB_APP_ID = "ca-app-pub-8896432770281749~3911574832";
+
+    /**
+     * --------------
+     * <p>
+     * Life Cycle
+     * <p>
+     * --------------
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +57,13 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
         dbHelper = new DBHelper(this, "record.db", null, DBHelper.DB_VERSION);
         isStoragePermissionGranted();
         initView();
+
+
+        MobileAds.initialize(this, ADMOB_APP_ID);
+
+        mAdView = (AdView) findViewById(R.id.list_adView);
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
+        mAdView.loadAd(adRequest);
     }
 
     @Override
@@ -50,7 +72,28 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
         Calendar c = Calendar.getInstance();
         currentListIndex = c.get(Calendar.MONTH) + 1;
         updateList(currentListIndex);
+        mAdView.resume();
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAdView.pause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mAdView.destroy();
+    }
+
+    /**
+     * --------------
+     * <p>
+     * privateMethods
+     * <p>
+     * --------------
+     */
 
     private void updateList(int index) {
         loadListFromDB(index);
@@ -61,7 +104,7 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public ArrayList<ITEM> loadListFromDB(int month) {
+    private ArrayList<ITEM> loadListFromDB(int month) {
         String column =
                 DBHelper.COLUMN_DATE + ", "
                         + DBHelper.COLUMN_START_TIME + ", "
@@ -93,13 +136,13 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
         return list;
     }
 
-    public void deleteItemFromDB(String path) {
+    private void deleteItemFromDB(String path) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete(DBHelper.TABLE_NAME, DBHelper.COLUMN_SIGNATURE_PATH + " = ?", new String[]{path});
         updateList(currentListIndex);
     }
 
-    public boolean isStoragePermissionGranted() {
+    private boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 //            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -132,10 +175,11 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
-                final AlertDialog dialog = new AlertDialog.Builder(ListActivity.this).create();
-                dialog.setTitle(list.get(i).date);
-                dialog.setMessage(list.get(i).startTime);
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final int itemIndex = i < 2 ? i : i - 1;
+                AlertDialog dialog = new AlertDialog.Builder(ListActivity.this).create();
+                dialog.setTitle(list.get(itemIndex).date);
+                dialog.setMessage(list.get(itemIndex).startTime);
                 dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -146,7 +190,7 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
                 dialog.setButton(AlertDialog.BUTTON_NEUTRAL, "刪除", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int id) {
-                        deleteItemFromDB(list.get(i).signaturePath);
+                        deleteItemFromDB(list.get(itemIndex).signaturePath);
                     }
                 });
                 dialog.show();
