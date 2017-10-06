@@ -14,6 +14,9 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.NativeExpressAdView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 /**
@@ -22,10 +25,10 @@ import java.util.ArrayList;
 
 public class MainListAdapter extends BaseAdapter {
 
-    ArrayList<ITEM> list = new ArrayList<>();
-    Context context;
+    private ArrayList<ITEM> list = new ArrayList<>();
+    private Context context;
 
-    public MainListAdapter(Context context, ArrayList list) {
+    MainListAdapter(Context context, ArrayList<ITEM> list) {
         this.list = list;
         this.context = context;
     }
@@ -69,6 +72,7 @@ public class MainListAdapter extends BaseAdapter {
         TextView dateTextView = (TextView) view.findViewById(R.id.list_item_date);
         TextView startTimeTextView = (TextView) view.findViewById(R.id.list_item_start);
         TextView endTimeTextView = (TextView) view.findViewById(R.id.list_item_end);
+        TextView timeIntervalTextView = (TextView) view.findViewById(R.id.list_item_interval);
         ImageView signImageView = (ImageView) view.findViewById(R.id.list_item_sign);
 
         if (list == null) {
@@ -77,15 +81,26 @@ public class MainListAdapter extends BaseAdapter {
 
         position = position > 2 ? position - 1 : position;
 
-        dateTextView.setText(String.format("%s: %s",
+
+        dateTextView.setText(String.format(
                 context.getResources().getString(R.string.class_date),
                 list.get(position).date));
-        startTimeTextView.setText(String.format("%s: %s",
+        startTimeTextView.setText(String.format(
                 context.getResources().getString(R.string.start_time),
                 list.get(position).startTime));
-        endTimeTextView.setText(String.format("%s: %s",
+        endTimeTextView.setText(String.format(
                 context.getResources().getString(R.string.end_time),
                 list.get(position).endTime));
+        try {
+            String classDuration = getClassDuration(list.get(position).startTime, list.get(position).endTime);
+            timeIntervalTextView.setText(String.format(
+                    context.getResources().getString(R.string.class_duration),
+                    classDuration));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
         Bitmap signature = getBitmap(list.get(position).signaturePath);
         signImageView.setImageBitmap(signature);
         // feature: add "IMG not found"
@@ -103,5 +118,15 @@ public class MainListAdapter extends BaseAdapter {
             Log.e("error", e.getMessage());
             return null;
         }
+    }
+
+    private String getClassDuration(String startTimeString, String endTimeString) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(GlobalConst.TimeFormat, context.getResources().getConfiguration().locale);
+        Date startTime = dateFormat.parse(startTimeString);
+        Date endTime = dateFormat.parse(endTimeString);
+        int durationHours = endTime.getHours() - startTime.getHours();
+        int durationMinutes = endTime.getMinutes() - startTime.getMinutes();
+        double duration = durationHours + (durationMinutes > 30 ? 0.5 : 0);
+        return String.valueOf(duration);
     }
 }

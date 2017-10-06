@@ -67,54 +67,14 @@
         android:layout_marginTop="4dp"
         android:background="@color/black" />
 
-    <LinearLayout
-        android:id="@+id/list_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/list_line"
-        android:layout_marginLeft="58dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:id="@+id/list_item_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/class_date"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/list_item_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:text="@string/start_time"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/list_item_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:text="@string/end_time"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/list_item_sign"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:text="@string/signature"
-            android:textSize="16sp" />
-
-    </LinearLayout>
-
     <ListView
         android:id="@+id/main_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/current_list_index"
-        android:layout_below="@+id/list_title"
+        android:layout_below="@+id/list_line"
         android:dividerHeight="4dp"
+        android:layout_marginTop="8dp"
         android:divider="@color/trans"
         android:paddingLeft="16dp"
         android:paddingRight="16dp" />

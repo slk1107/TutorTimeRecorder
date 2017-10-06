@@ -3,6 +3,7 @@ package com.example.kuanglin.tutortimerecord;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -27,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import static com.example.kuanglin.tutortimerecord.R.id.add_date_input;
@@ -40,13 +42,14 @@ import static com.example.kuanglin.tutortimerecord.R.id.add_start_input;
 
 public class AddActivity extends AppCompatActivity implements View.OnClickListener {
 
-    String startTime = "";
-    String endTime = "";
-    String date = "";
-    TextView mDateTextView, mStartTimeTextView, mEndTimeTextView;
+    private String startTime = "";
+    private String endTime = "";
+    private String date = "";
+    private TextView mDateTextView, mStartTimeTextView, mEndTimeTextView;
     DBHelper dbHelper;
+    private SimpleDateFormat mDateFormat;
     private CanvasView canvas;
-//    public final static int BITMAP_WIDTH = 800;
+    //    public final static int BITMAP_WIDTH = 800;
 //    public final static int BITMAP_HEIGHT = 360;
     public final static int BITMAP_WIDTH = 300;
     public final static int BITMAP_HEIGHT = 135;
@@ -68,14 +71,37 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
         dbHelper = new DBHelper(this, "record.db", null, DBHelper.DB_VERSION);
 
+        initDateFormat();
         initView();
-        if(getSupportActionBar()!=null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }else {
-            Log.d("QQ","WTF");
+        } else {
+            Log.d("QQ", "WTF");
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Bundle extras = getIntent().getExtras();
+        if (extras == null) {
+            return;
+        }
+        ITEM intentItem = (ITEM) (extras.getSerializable(GlobalConst.ITEM));
+        if (intentItem == null) {
+            return;
+        }
+        mDateTextView.setText(intentItem.date);
+        mStartTimeTextView.setText(intentItem.startTime);
+        mEndTimeTextView.setText(intentItem.endTime);
+        //The key argument here must match that used in the other activity
+
+    }
+
+    private void initDateFormat() {
+        mDateFormat = new SimpleDateFormat(GlobalConst.TimeFormat, getResources().getConfiguration().locale);
     }
 
     /**
@@ -85,12 +111,12 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
      */
 
     private void initView() {
-        setupDate();
-        setupTimes();
+        initDate();
+        initTimes();
         setupCanvas();
     }
 
-    private void setupDate() {
+    private void initDate() {
         mDateTextView = (TextView) findViewById(add_date_input);
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
@@ -101,16 +127,16 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         mDateTextView.setOnClickListener(this);
     }
 
-    private void setupTimes() {
+    private void initTimes() {
         mStartTimeTextView = (TextView) findViewById(add_start_input);
         mEndTimeTextView = (TextView) findViewById(add_end_input);
 
         Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
-        int minute = c.get(Calendar.MINUTE);
+        int min = c.get(Calendar.MINUTE);
+        startTime = mDateFormat.format(c.getTime());
+        endTime = mDateFormat.format(new Date(0, 0, 0, hour + 2, min));
 
-        startTime = formatTime(hour, minute);
-        endTime = formatTime(hour + 2, minute);
 
         mStartTimeTextView.setText(startTime);
         mEndTimeTextView.setText(endTime);
@@ -191,40 +217,44 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 currentDay).show();
     }
 
-    private void showTimePicker(final TextView mTextView) {
+    private void showTimePicker(final TextView selectedTextView) {
 
-        String[] times = mTextView.getText().toString().split("：");
-        int hour = Integer.valueOf(times[0]);
-        int minute = Integer.valueOf(times[1]);
-
-        TimePickerDialog timePickerDialog = new TimePickerDialog(AddActivity.this, TimePickerDialog.THEME_DEVICE_DEFAULT_LIGHT, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                if (mTextView == mStartTimeTextView) {
-                    startTime = formatTime(i, i1);
-                    mTextView.setText(startTime);
-                } else if (mTextView == mEndTimeTextView) {
-                    endTime = formatTime(i, i1);
-                    mTextView.setText(endTime);
+        try {
+            Date time = mDateFormat.parse(selectedTextView.getText().toString());
+            int hour = time.getHours();
+            int minute = time.getMinutes();
+            TimePickerDialog timePickerDialog = new TimePickerDialog(AddActivity.this, TimePickerDialog.THEME_DEVICE_DEFAULT_LIGHT, new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                    if (selectedTextView == mStartTimeTextView) {
+                        startTime = formatTime(i, i1);
+                        selectedTextView.setText(startTime);
+                    } else if (selectedTextView == mEndTimeTextView) {
+                        endTime = formatTime(i, i1);
+                        selectedTextView.setText(endTime);
+                    }
                 }
-            }
-        }, hour, minute, true);
-        timePickerDialog.show();
+            }, hour, minute, true);
+            timePickerDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private ITEM getFrom() {
-        Calendar c = Calendar.getInstance();
-        Locale.getDefault();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss",Locale.getDefault());
-        String currentDateAndTime = sdf.format(c.getTime());
-        String name = date.replace("/", "") + "T" + startTime.split("：")[0] + startTime.split("：")[1];
-        String signaturePath = saveToInternalStorage(canvas.getScaleBitmap(BITMAP_WIDTH,BITMAP_HEIGHT), currentDateAndTime);
-        Log.d("QQ",signaturePath);
 
         ITEM item = new ITEM();
         item.startTime = mStartTimeTextView.getText().toString();
         item.endTime = mEndTimeTextView.getText().toString();
         item.date = mDateTextView.getText().toString();
+
+        Calendar c = Calendar.getInstance();
+        Locale.getDefault();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.getDefault());
+        String currentDateAndTime = sdf.format(c.getTime());
+        String signaturePath = saveToInternalStorage(canvas.getScaleBitmap(BITMAP_WIDTH, BITMAP_HEIGHT), currentDateAndTime);
+        Log.d("QQ", signaturePath);
+
         item.signaturePath = signaturePath;
         return item;
     }
@@ -236,14 +266,14 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
      */
 
     private String formatTime(int hour, int minutes) {
-
-        int hourLength = String.valueOf(hour).length();
-        int minuteLength = String.valueOf(minutes).length();
-        String hourString = hour > 23 ? String.valueOf(hour - 24) : String.valueOf(hour);
-        hourString = hourLength < 2 ? "0" + hour : hourString;
-        String minuteString = minuteLength < 2 ? "0" + minutes : String.valueOf(minutes);
-
-        return String.format("%s：%s", hourString, minuteString);
+        return mDateFormat.format(new Date(0, 0, 0, hour, minutes));
+//        int hourLength = String.valueOf(hour).length();
+//        int minuteLength = String.valueOf(minutes).length();
+//        String hourString = hour > 23 ? String.valueOf(hour - 24) : String.valueOf(hour);
+//        hourString = hourLength < 2 ? "0" + hour : hourString;
+//        String minuteString = minuteLength < 2 ? "0" + minutes : String.valueOf(minutes);
+//
+//        return String.format("%s：%s", hourString, minuteString);
     }
 
     private String saveToInternalStorage(Bitmap bitmapImage, String name) {
@@ -251,12 +281,12 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         File directory = new File(path);
         directory.mkdir();
         // Create imageDir
-        File mypath = new File(path, name + ".jpg");
-        Log.d("QQ", mypath.toString());
+        File myPath = new File(path, name + ".jpg");
+        Log.d("QQ", myPath.toString());
 
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(mypath);
+            fos = new FileOutputStream(myPath);
             // Use the compress method on the BitMap object to write image to the OutputStream
             bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
         } catch (Exception e) {
@@ -270,12 +300,12 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 e.printStackTrace();
             }
         }
-        Log.d("QQ", mypath.getAbsolutePath());
-        return mypath.getAbsolutePath();
+        Log.d("QQ", myPath.getAbsolutePath());
+        return myPath.getAbsolutePath();
     }
 
-    private boolean insertItem(ITEM item){
-        if(item == null){
+    private boolean insertItem(ITEM item) {
+        if (item == null) {
             return false;
         }
 
@@ -292,8 +322,9 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             db.insertOrThrow(DBHelper.TABLE_NAME, null, values);
             return true;
         } catch (android.database.sqlite.SQLiteConstraintException e) {
-            Log.d("QQ","insert Fail");
+            Log.d("QQ", "insert Fail");
             return false;
         }
     }
+
 }

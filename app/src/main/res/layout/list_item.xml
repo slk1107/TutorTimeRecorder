@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="96dp"
+    android:layout_height="wrap_content"
     android:layout_margin="8dp"
     android:background="@drawable/list_item_background"
     android:gravity="center_vertical"
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/list_item_date"
         android:layout_marginTop="4dp"
-        android:text="12:00"
+        android:text="上課時間：12:00"
         android:textColor="#0037ff"
         android:textSize="18sp" />
 
@@ -31,17 +31,29 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/list_item_start"
         android:layout_marginTop="4dp"
-        android:text="12:00"
+        android:text="下課時間：12:00"
+        android:textColor="#0037ff"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/list_item_interval"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/list_item_end"
+        android:layout_marginTop="4dp"
+        android:text="上課時數：2小時"
         android:textColor="#0037ff"
         android:textSize="18sp" />
 
     <ImageView
         android:id="@+id/list_item_sign"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitCenter"
+        android:layout_alignBottom="@id/list_item_interval"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/list_item_start"
-        android:layout_marginLeft="16dp" />
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@id/list_item_end"
+        android:scaleType="fitCenter" />
 
 </RelativeLayout>

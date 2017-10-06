@@ -7,8 +7,8 @@ import java.io.Serializable;
  */
 
 class ITEM implements Serializable{
-    public String date = "";
-    public String startTime = "";
-    public String endTime = "";
-    public String signaturePath;
+    String date = "";
+    String startTime = "";
+    String endTime = "";
+    String signaturePath;
 }

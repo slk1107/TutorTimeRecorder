@@ -8,17 +8,17 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by KuangLin on 2017/5/6.
  */
 
-public class DBHelper extends SQLiteOpenHelper {
+class DBHelper extends SQLiteOpenHelper {
 
-    public static final int DB_VERSION = 1;
-    public static final String TABLE_NAME = "CLASS_RECORD";
-    public static final String COLUMN_MONTH = "MONTH";
-    public static final String COLUMN_DATE = "DATE";
-    public static final String COLUMN_START_TIME = "START_TIME";
-    public static final String COLUMN_END_TIME = "END_TIME";
-    public static final String COLUMN_SIGNATURE_PATH = "SIGNATURE_PATH";
+    static final int DB_VERSION = 1;
+    static final String TABLE_NAME = "CLASS_RECORD";
+    static final String COLUMN_MONTH = "MONTH";
+    static final String COLUMN_DATE = "DATE";
+    static final String COLUMN_START_TIME = "START_TIME";
+    static final String COLUMN_END_TIME = "END_TIME";
+    static final String COLUMN_SIGNATURE_PATH = "SIGNATURE_PATH";
 
-    public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
 

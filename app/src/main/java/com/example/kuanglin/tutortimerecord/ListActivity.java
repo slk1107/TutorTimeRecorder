@@ -20,14 +20,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.facebook.FacebookSdk;
-
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import static com.example.kuanglin.tutortimerecord.R.id.list_left_arrow;
 import static com.example.kuanglin.tutortimerecord.R.id.list_right_arrow;
@@ -87,10 +88,10 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
         mAdView.destroy();
     }
 
-    /**
+    /**x`
      * --------------
      * <p>
-     * privateMethods
+     * Private Methods
      * <p>
      * --------------
      */
@@ -136,6 +137,16 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
         return list;
     }
 
+//    private void checkDB(){
+//        for(ITEM item : list){
+//            if(item.startTime.contains("：")){
+//                item.startTime = item.startTime.replace("：",":");
+//                item.endTime = item.endTime.replace("：",":");
+//                updateClassRecordDB(item);
+//            }
+//        }
+//    }
+
     private void deleteItemFromDB(String path) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete(DBHelper.TABLE_NAME, DBHelper.COLUMN_SIGNATURE_PATH + " = ?", new String[]{path});
@@ -158,6 +169,12 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     *
+     * Views
+     *
+     * */
+
     private void initView() {
         mTotalHourTextView = (TextView) findViewById(R.id.result_main_total_hour);
         mTotalPriceTextView = (TextView) findViewById(R.id.result_main_total_money);
@@ -179,20 +196,21 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
                 final int itemIndex = i < 2 ? i : i - 1;
                 AlertDialog dialog = new AlertDialog.Builder(ListActivity.this).create();
                 dialog.setTitle(list.get(itemIndex).date);
-                dialog.setMessage(list.get(itemIndex).startTime);
-                dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+                dialog.setMessage(list.get(itemIndex).startTime + "\n" + list.get(itemIndex).endTime);
+                dialog.setButton(AlertDialog.BUTTON_POSITIVE, "取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                     }
                 });
 
-                dialog.setButton(AlertDialog.BUTTON_NEUTRAL, "刪除", new DialogInterface.OnClickListener() {
+                dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "刪除", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int id) {
                         deleteItemFromDB(list.get(itemIndex).signaturePath);
                     }
                 });
+
                 dialog.show();
             }
         });
@@ -205,7 +223,11 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
     private void updateTotal() {
         int totalHours = 0;
         for (int i = 0; i < list.size(); i++) {
-            totalHours += getTimeGap(list.get(i).startTime, list.get(i).endTime);
+            try {
+                totalHours += getClassDuration(list.get(i).startTime, list.get(i).endTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         int salary = 650;
@@ -218,12 +240,14 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
-    private int getTimeGap(String start, String end) {
-        int startHour = Integer.valueOf(start.split("：")[0]);
-        int startMinute = Integer.valueOf(start.split("：")[1]);
-        int endHour = Integer.valueOf(end.split("：")[0]);
-        int endMinute = Integer.valueOf(end.split("：")[1]);
+    private int getClassDuration(String startTime, String endTime) throws ParseException {
+        DateFormat dateFormat = new SimpleDateFormat(GlobalConst.TimeFormat,getResources().getConfiguration().locale);
+        Date startTimeDate = dateFormat.parse(startTime);
+        Date endTimeDate = dateFormat.parse(endTime);
+        int startHour = startTimeDate.getHours();
+        int startMinute = startTimeDate.getMinutes();
+        int endHour = endTimeDate.getHours();
+        int endMinute = endTimeDate.getMinutes();
 
         int minuteGap;
         int hourGap;
@@ -279,4 +303,18 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+//    private void updateClassRecordDB(ITEM item) {
+//        if (item.signaturePath == null) {
+//            return;
+//        }
+//        SQLiteDatabase db = this.dbHelper.getWritableDatabase();
+//        ContentValues values = new ContentValues();
+//        values.put(DBHelper.COLUMN_START_TIME, item.startTime);
+//        values.put(DBHelper.COLUMN_END_TIME, item.endTime);
+//        try {
+//            db.update(DBHelper.TABLE_NAME, values, DBHelper.COLUMN_SIGNATURE_PATH + " = ?", new String[]{item.signaturePath});
+//        } catch (SQLiteConstraintException e) {
+//            Log.e("SQL", e.getMessage());
+//        }
+//    }
 }
