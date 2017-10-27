@@ -228,7 +228,9 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 public void onTimeSet(TimePicker timePicker, int i, int i1) {
                     if (selectedTextView == mStartTimeTextView) {
                         startTime = formatTime(i, i1);
+                        endTime = formatTime(i+2, i1);
                         selectedTextView.setText(startTime);
+                        mEndTimeTextView.setText(endTime);
                     } else if (selectedTextView == mEndTimeTextView) {
                         endTime = formatTime(i, i1);
                         selectedTextView.setText(endTime);
@@ -267,13 +269,6 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
     private String formatTime(int hour, int minutes) {
         return mDateFormat.format(new Date(0, 0, 0, hour, minutes));
-//        int hourLength = String.valueOf(hour).length();
-//        int minuteLength = String.valueOf(minutes).length();
-//        String hourString = hour > 23 ? String.valueOf(hour - 24) : String.valueOf(hour);
-//        hourString = hourLength < 2 ? "0" + hour : hourString;
-//        String minuteString = minuteLength < 2 ? "0" + minutes : String.valueOf(minutes);
-//
-//        return String.format("%s：%s", hourString, minuteString);
     }
 
     private String saveToInternalStorage(Bitmap bitmapImage, String name) {

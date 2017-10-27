@@ -125,8 +125,8 @@ public class MainListAdapter extends BaseAdapter {
         Date startTime = dateFormat.parse(startTimeString);
         Date endTime = dateFormat.parse(endTimeString);
         int durationHours = endTime.getHours() - startTime.getHours();
-        int durationMinutes = endTime.getMinutes() - startTime.getMinutes();
-        double duration = durationHours + (durationMinutes > 30 ? 0.5 : 0);
+        float durationMinutes = endTime.getMinutes() - startTime.getMinutes();
+        double duration = durationHours + (durationMinutes >= 30 ? 0.5 : durationMinutes <= -30 ? -0.5 :0);
         return String.valueOf(duration);
     }
 }

@@ -137,16 +137,6 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
         return list;
     }
 
-//    private void checkDB(){
-//        for(ITEM item : list){
-//            if(item.startTime.contains("：")){
-//                item.startTime = item.startTime.replace("：",":");
-//                item.endTime = item.endTime.replace("：",":");
-//                updateClassRecordDB(item);
-//            }
-//        }
-//    }
-
     private void deleteItemFromDB(String path) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete(DBHelper.TABLE_NAME, DBHelper.COLUMN_SIGNATURE_PATH + " = ?", new String[]{path});
@@ -221,7 +211,7 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void updateTotal() {
-        int totalHours = 0;
+        float totalHours = 0;
         for (int i = 0; i < list.size(); i++) {
             try {
                 totalHours += getClassDuration(list.get(i).startTime, list.get(i).endTime);
@@ -231,7 +221,7 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         int salary = 650;
-        int totalPrice = totalHours * salary;
+        int totalPrice = (int)(totalHours * salary);
 
         String totalHourText = totalHours + "小時";
         String totalPriceText = totalPrice + "元";
@@ -240,7 +230,7 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private int getClassDuration(String startTime, String endTime) throws ParseException {
+    private float getClassDuration(String startTime, String endTime) throws ParseException {
         DateFormat dateFormat = new SimpleDateFormat(GlobalConst.TimeFormat,getResources().getConfiguration().locale);
         Date startTimeDate = dateFormat.parse(startTime);
         Date endTimeDate = dateFormat.parse(endTime);
@@ -266,7 +256,9 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
             return 0;
         }
 
-        return totalMinute / 60;
+        int halfHour = totalMinute / 30;
+
+        return halfHour / 2.f;
     }
 
 
