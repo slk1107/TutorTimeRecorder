@@ -49,11 +49,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     DBHelper dbHelper;
     private SimpleDateFormat mDateFormat;
     private CanvasView canvas;
-    //    public final static int BITMAP_WIDTH = 800;
-//    public final static int BITMAP_HEIGHT = 360;
     public final static int BITMAP_WIDTH = 300;
-    public final static int BITMAP_HEIGHT = 135;
-
 
     /**
      * -----------------------
@@ -254,7 +250,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         Locale.getDefault();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.getDefault());
         String currentDateAndTime = sdf.format(c.getTime());
-        String signaturePath = saveToInternalStorage(canvas.getScaleBitmap(BITMAP_WIDTH, BITMAP_HEIGHT), currentDateAndTime);
+        int bitmapHeight = (int)(BITMAP_WIDTH * ((float)canvas.getHeight() / (float) canvas.getWidth()));
+        String signaturePath = saveToInternalStorage(canvas.getScaleBitmap(BITMAP_WIDTH, bitmapHeight), currentDateAndTime);
         Log.d("QQ", signaturePath);
 
         item.signaturePath = signaturePath;

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="2017/4/25"
         android:textColor="#0037ff"
-        android:textSize="18sp" />
+        android:textSize="@dimen/list_item_font_size" />
 
     <TextView
         android:id="@+id/list_item_start"
@@ -23,7 +23,7 @@
         android:layout_marginTop="4dp"
         android:text="上課時間：12:00"
         android:textColor="#0037ff"
-        android:textSize="18sp" />
+        android:textSize="@dimen/list_item_font_size" />
 
     <TextView
         android:id="@+id/list_item_end"
@@ -33,7 +33,7 @@
         android:layout_marginTop="4dp"
         android:text="下課時間：12:00"
         android:textColor="#0037ff"
-        android:textSize="18sp" />
+        android:textSize="@dimen/list_item_font_size" />
 
     <TextView
         android:id="@+id/list_item_interval"
@@ -43,7 +43,7 @@
         android:layout_marginTop="4dp"
         android:text="上課時數：2小時"
         android:textColor="#0037ff"
-        android:textSize="18sp" />
+        android:textSize="@dimen/list_item_font_size" />
 
     <ImageView
         android:id="@+id/list_item_sign"
@@ -52,7 +52,7 @@
         android:layout_alignBottom="@id/list_item_interval"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/list_item_start"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="32dp"
         android:layout_toRightOf="@id/list_item_end"
         android:scaleType="fitCenter" />
 

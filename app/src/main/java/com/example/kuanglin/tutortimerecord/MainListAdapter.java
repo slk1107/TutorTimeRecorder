@@ -104,6 +104,7 @@ public class MainListAdapter extends BaseAdapter {
         Bitmap signature = getBitmap(list.get(position).signaturePath);
         signImageView.setImageBitmap(signature);
         // feature: add "IMG not found"
+        Log.d("QQ","image view width: " + signImageView.getWidth());
         return view;
     }
 
@@ -116,7 +117,7 @@ public class MainListAdapter extends BaseAdapter {
         } catch (Exception e) {
             Log.e("error", "signature has been deleted.");
             Log.e("error", e.getMessage());
-            return null;
+            return Bitmap.createBitmap(0,0, Bitmap.Config.ALPHA_8);
         }
     }
 
